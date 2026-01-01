@@ -1,0 +1,5 @@
+name: FunctionalLib
+version: '${version}'
+main: com.g4vrk.functionalLib.FunctionalLibPlugin
+api-version: '1.16'
+authors: [ g4vrk ]
