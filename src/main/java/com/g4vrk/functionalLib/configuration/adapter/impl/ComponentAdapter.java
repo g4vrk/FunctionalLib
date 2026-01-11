@@ -4,6 +4,9 @@ import com.g4vrk.functionalLib.configuration.adapter.Adapter;
 import com.g4vrk.functionalLib.util.text.TextUtil;
 import net.kyori.adventure.text.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ComponentAdapter implements Adapter<Component> {
     @Override
     public Class<Component> getType() {
@@ -16,6 +19,14 @@ public class ComponentAdapter implements Adapter<Component> {
             return TextUtil.format(string);
         }
 
-        return TextUtil.format(value.toString());
+        if (value instanceof List<?> list) {
+            String joined = list.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining("\n"));
+
+            return TextUtil.format(joined);
+        }
+
+        return TextUtil.format(String.valueOf(value));
     }
 }

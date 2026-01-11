@@ -8,17 +8,17 @@ public abstract class StaticMenu extends Menu {
 
     private boolean initialized;
 
-    protected final void initOnce() {
+    protected final void initOnce(Player player) {
         if (initialized) return;
 
         inventory = createInventory();
-        prepareInventory();
+        prepareInventory(player);
         initialized = true;
     }
 
     @Override
     public final void show(@NotNull Player player) {
-        initOnce();
+        initOnce(player);
         player.openInventory(inventory);
     }
 }

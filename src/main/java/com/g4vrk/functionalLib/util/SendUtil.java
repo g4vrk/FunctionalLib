@@ -8,6 +8,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
@@ -21,15 +22,23 @@ public class SendUtil {
         audiences.player(player).sendMessage(component);
     }
 
-    public void sendMessageFormat(Player player, String string) {
+    public void sendMessage(Player player, String string) {
         audiences.player(player).sendMessage(TextUtil.format(string));
+    }
+
+    public void sendMessage(CommandSender sender, Component component) {
+        audiences.sender(sender).sendMessage(component);
+    }
+
+    public void sendMessage(CommandSender sender, String string) {
+        audiences.sender(sender).sendMessage(TextUtil.format(string));
     }
 
     public void sendActionBar(Player player, Component component) {
         audiences.player(player).sendActionBar(component);
     }
 
-    public void sendActionBarFormat(Player player, String string) {
+    public void sendActionBar(Player player, String string) {
         audiences.player(player).sendActionBar(TextUtil.format(string));
     }
 

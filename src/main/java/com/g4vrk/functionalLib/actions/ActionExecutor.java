@@ -1,10 +1,10 @@
 package com.g4vrk.functionalLib.actions;
 
 import com.g4vrk.functionalLib.FunctionalLibPlugin;
+import com.g4vrk.functionalLib.actions.impl.*;
 import com.g4vrk.functionalLib.configuration.Configuration;
 import com.g4vrk.functionalLib.util.TaskUtil;
 import com.g4vrk.functionalLib.util.text.ReplaceUtil;
-import lombok.experimental.UtilityClass;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
@@ -13,11 +13,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@UtilityClass
 public final class ActionExecutor {
 
-    private final FunctionalLibPlugin plugin = FunctionalLibPlugin.getInstance();
     private final Map<String, Action> actionMap = new ConcurrentHashMap<>();
+
+    // default actions, provided by plugin
+    {
+        registerAction(new ActionBarAction());
+        registerAction(new CloseMenuAction());
+        registerAction(new ConsoleAction());
+        registerAction(new MessageAction());
+        registerAction(new SoundAction());
+        registerAction(new TitleAction());
+        registerAction(new UpdateInventoryAction());
+    }
+
+    public ActionExecutor() {
+    }
 
     public void runActions(String path, Player player, Configuration configuration, @Nullable Object[] placeholders) {
         List<String> rawList = PlaceholderAPI.setPlaceholders(player, configuration.getStringList(path)) ;
@@ -58,7 +70,7 @@ public final class ActionExecutor {
         }
     }
 
-    public static void registerAction(Action action) {
+    public void registerAction(Action action) {
         if (actionMap.containsKey(action.getActionKey().toLowerCase())) {
             throw new IllegalArgumentException(
                     "Действие " + action.getActionKey().toLowerCase() + " уже зарегистрировано классом " + actionMap.get(action.getActionKey()).getClass().getSimpleName()

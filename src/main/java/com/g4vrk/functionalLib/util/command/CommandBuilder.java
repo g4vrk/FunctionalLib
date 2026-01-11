@@ -41,16 +41,14 @@ public class CommandBuilder {
     public void register() {
         PluginCommand command;
 
-        if (!forceRegister) {
+        if (!forceRegister || plugin.getCommand(name) != null) {
             command = plugin.getCommand(name);
         } else {
-            command = null;
-        }
-
-        if (command == null) {
             command = CommandUtil.create(name, plugin);
             CommandUtil.register(plugin, command);
         }
+
+        if (command == null) return;
 
         command.setDescription(description);
         command.setUsage(usage.isEmpty() ? "/" + name : usage);

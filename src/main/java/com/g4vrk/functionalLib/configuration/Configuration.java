@@ -51,7 +51,10 @@ public interface Configuration {
     List<Component> getComponentList(String path, List<Component> def);
 
     void save(File file);
+    void save();
     void set(String path, Object value);
 
     boolean contains(String path);
+
+    void reload();
 }

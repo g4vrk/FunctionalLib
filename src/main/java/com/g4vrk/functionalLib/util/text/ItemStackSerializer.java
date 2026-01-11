@@ -35,10 +35,8 @@ public class ItemStackSerializer {
             return null;
         }
 
-        try (ByteArrayInputStream inputStream =
-                     new ByteArrayInputStream(Base64Coder.decodeLines(base64));
-             BukkitObjectInputStream dataInput =
-                     new BukkitObjectInputStream(inputStream)) {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
+             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream)) {
 
             Object object = dataInput.readObject();
 
@@ -78,10 +76,8 @@ public class ItemStackSerializer {
             return new ItemStack[0];
         }
 
-        try (ByteArrayInputStream inputStream =
-                     new ByteArrayInputStream(Base64Coder.decodeLines(base64));
-             BukkitObjectInputStream dataInput =
-                     new BukkitObjectInputStream(inputStream)) {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
+             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream)) {
 
             int length = dataInput.readInt();
             ItemStack[] items = new ItemStack[length];

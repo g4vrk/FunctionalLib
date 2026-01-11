@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class TextUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
             .hexColors()
             .useUnusualXRepeatedCharacterHexFormat()
-            .character('§')
+            .character(ChatColor.COLOR_CHAR)
             .build();
 
     private static final Map<Character, String> CHAR_TO_MINI_MESSAGE = new ConcurrentHashMap<>();

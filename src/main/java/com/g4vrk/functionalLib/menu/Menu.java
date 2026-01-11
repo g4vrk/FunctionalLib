@@ -37,40 +37,38 @@ public abstract class Menu implements InventoryHolder {
         return Bukkit.createInventory(this, getSize() % 9 == 0 ? getSize() : (getSize() / 9) * 9, TextUtil.format(getTitle() != null ? getTitle() : ""));
     }
 
-    protected void setInventoryItems() {
-        items.forEach((slot, menuItem) -> inventory.setItem(slot, inventory.getItem(slot) == null ? menuItem.getItemStack() : inventory.getItem(slot)));
+    protected void setInventoryItems(@Nullable Object... placeholders) {
+        items.forEach((slot, menuItem) -> inventory.setItem(slot, inventory.getItem(slot) == null ? menuItem.getItemStack(placeholders) : inventory.getItem(slot)));
     }
 
-    protected void prepareInventory() {
+    protected void prepareInventory(Player player) {
         inventory.clear();
         items.clear();
 
         loadItems();
-        setInventoryItems();
+        setInventoryItems((Object) null);
     }
 
-    public void refresh() {
-        prepareInventory();
+    public void refresh(Player player) {
+        prepareInventory(player);
     }
 
     public void show(@NotNull Player player) {
         inventory = createInventory();
         viewer = player;
-        prepareInventory();
+        prepareInventory(player);
 
         player.openInventory(inventory);
     }
 
-    protected void showParent(@NotNull Player player) {
+    public void showParent(@NotNull Player player) {
         if (parent == null) return;
         parent.show(player);
     }
 
     public void onClick(@NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        player.setItemOnCursor(null);
         int slot = event.getSlot();
 
         MenuItem item = items.get(slot);

@@ -1,35 +1,29 @@
 package com.g4vrk.functionalLib;
 
-import com.g4vrk.functionalLib.actions.ActionExecutor;
-import com.g4vrk.functionalLib.actions.impl.*;
+import com.g4vrk.functionalLib.menu.listener.MenuClickListener;
 import lombok.Getter;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 @Getter
-public final class FunctionalLibPlugin extends JavaPlugin {
+public final class FunctionalLibPlugin extends BasePlugin {
 
     @Getter
     private static FunctionalLibPlugin instance;
+    private static Logger log;
 
     private BukkitAudiences audiences;
 
-    @Override
-    public void onLoad() {
+    public FunctionalLibPlugin() {
         instance = this;
+        log = getSLF4JLogger();
     }
 
     @Override
-    public void onEnable() {
+    public void onEnabling() {
         audiences = BukkitAudiences.create(this);
-
-        ActionExecutor.registerAction(new ActionBarAction());
-        ActionExecutor.registerAction(new CloseMenuAction());
-        ActionExecutor.registerAction(new ConsoleAction());
-        ActionExecutor.registerAction(new MessageAction());
-        ActionExecutor.registerAction(new SoundAction());
-        ActionExecutor.registerAction(new TitleAction());
-        ActionExecutor.registerAction(new UpdateInventoryAction());
+        new MenuClickListener().registerEvents(this);
     }
 
     @Override
@@ -37,5 +31,12 @@ public final class FunctionalLibPlugin extends JavaPlugin {
         if (this.audiences != null) {
             this.audiences.close();
         }
+    }
+
+    public static @Nullable Logger logger() {
+        if (log == null) {
+            getInstance().getSLF4JLogger().error("Логгер не был инициализирован. Используйте logger() после инициализации плагина FunctionalLib");
+        }
+        return log;
     }
 }

@@ -27,7 +27,7 @@ public class ReplaceUtil {
         return finalText;
     }
 
-    public static @NotNull String format(@NotNull String rawText, @Nullable Object[] placeholders) {
+    public static @NotNull String format(@NotNull String rawText, @Nullable Object... placeholders) {
         if (placeholders == null || placeholders.length == 0 || placeholders.length % 2 != 0) {
             return rawText;
         }
@@ -42,13 +42,13 @@ public class ReplaceUtil {
         return finalText;
     }
 
-    public static @NotNull List<String> formatStringList(@NotNull List<String> rawList, @Nullable Object[] placeholders) {
+    public static @NotNull List<String> formatStringList(@NotNull List<String> rawList, @Nullable Object... placeholders) {
         return rawList.stream()
                 .map(string -> format(string, placeholders))
                 .toList();
     }
 
-    public static @NotNull List<Component> formatComponentList(@NotNull List<Component> rawList, @Nullable Object[] placeholders) {
+    public static @NotNull List<Component> formatComponentList(@NotNull List<Component> rawList, @Nullable Object... placeholders) {
         return rawList.stream()
                 .map(component -> format(component, placeholders))
                 .toList();

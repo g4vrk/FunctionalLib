@@ -21,37 +21,59 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class YamlConfig implements Configuration {
 
-    private final @NotNull MemorySection section;
-    private final @Nullable MemorySection defaultSection;
+    private @NotNull MemorySection rootSection;
+    private @Nullable MemorySection defaultSection;
 
     private final @NotNull File configFile;
+
     private final @Nullable InputStream defaultInputStream;
+    private @Nullable String defaultYamlContent;
 
     private final Map<String, YamlValue> values = new ConcurrentHashMap<>();
     private final Map<String, YamlValue> defaultValues = new ConcurrentHashMap<>();
 
-    public YamlConfig(File configFile) throws InvalidConfigurationException, IOException {
+    public YamlConfig(File configFile) throws IOException {
         this(configFile, null);
     }
 
-    public YamlConfig(@NotNull File configFile, @Nullable InputStream defaultInputStream) throws InvalidConfigurationException, IOException {
+    public YamlConfig(@NotNull File configFile, @Nullable InputStream defaultInputStream) throws IOException {
+
         this.configFile = configFile;
         this.defaultInputStream = defaultInputStream;
 
-        YamlConfiguration yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.load(configFile);
-        this.section = yamlConfiguration;
-
-        this.section.getValues(true).forEach((k, v) -> values.put(k, new YamlValue(v)));
-
         if (defaultInputStream != null) {
-            YamlConfiguration defaultYamlConfiguration = new YamlConfiguration();
-            defaultYamlConfiguration.loadFromString(new String(defaultInputStream.readAllBytes()));
-            this.defaultSection = defaultYamlConfiguration;
+            this.defaultYamlContent = new String(defaultInputStream.readAllBytes());
+        }
 
-            this.defaultSection.getValues(true).forEach((s, o) -> defaultValues.put(s, new YamlValue(o)));
-        } else {
-            this.defaultSection = null;
+        this.load();
+    }
+
+
+    private void load() {
+        rootSection = null;
+        try {
+            YamlConfiguration yamlConfiguration = new YamlConfiguration();
+            yamlConfiguration.load(configFile);
+            this.rootSection = yamlConfiguration;
+
+            values.clear();
+            this.rootSection.getValues(true)
+                    .forEach((k, v) -> values.put(k, new YamlValue(v)));
+
+            defaultValues.clear();
+
+            if (defaultYamlContent != null) {
+                YamlConfiguration defaultYaml = new YamlConfiguration();
+                defaultYaml.loadFromString(defaultYamlContent);
+                this.defaultSection = defaultYaml;
+
+                this.defaultSection.getValues(true)
+                        .forEach((k, v) -> defaultValues.put(k, new YamlValue(v)));
+            } else {
+                this.defaultSection = null;
+            }
+        } catch (IOException | InvalidConfigurationException e) {
+            FunctionalLibPlugin.getInstance().getSLF4JLogger().error("Ошибка загрузки конфига: {}", configFile.getName(), e);
         }
     }
 
@@ -206,20 +228,30 @@ public class YamlConfig implements Configuration {
     @Override
     public void save(File file) {
         try {
-            ((YamlConfiguration) section).save(file);
+            ((YamlConfiguration) rootSection).save(file);
         } catch (IOException e) {
             FunctionalLibPlugin.getInstance().getSLF4JLogger().error("Ошибка при сохранении конфигурации", e);
         }
     }
 
     @Override
+    public void save() {
+        save(configFile);
+    }
+
+    @Override
     public void set(String path, Object value) {
-        section.set(path, value);
+        rootSection.set(path, value);
         values.put(path, new YamlValue(value));
     }
 
     @Override
     public boolean contains(String path) {
         return values.containsKey(path);
+    }
+
+    @Override
+    public void reload() {
+        this.load();
     }
 }
