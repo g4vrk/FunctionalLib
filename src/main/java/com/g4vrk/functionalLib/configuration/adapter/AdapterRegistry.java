@@ -4,6 +4,8 @@ import com.g4vrk.functionalLib.configuration.yaml.YamlValue;
 import com.g4vrk.functionalLib.configuration.adapter.impl.*;
 import lombok.experimental.UtilityClass;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,5 +44,11 @@ public final class AdapterRegistry {
 
         return adapter.adapt(value);
     }
- }
+
+    public static <T> List<T> getAsList(YamlValue value, Class<T> type) {
+        return value.isList() ? value.asList().stream()
+                .map(v -> getAs(v, type))
+                .toList() : Collections.emptyList();
+    }
+}
 

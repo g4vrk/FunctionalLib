@@ -69,6 +69,10 @@
                             <pattern>com.google</pattern>
                             <shadedPattern>com.g4vrk.libs.google</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer</pattern>
+                            <shadedPattern>com.g4vrk.libs.zaxxer</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -110,6 +114,13 @@
             <artifactId>paper-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>7.0.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

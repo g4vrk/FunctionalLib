@@ -10,7 +10,7 @@ import java.util.List;
 @UtilityClass
 public class ReplaceUtil {
 
-    public static @NotNull Component format(@NotNull Component rawText, @Nullable Object[] placeholders) {
+    public static @NotNull Component format(@NotNull Component rawText, @Nullable Object... placeholders) {
         if (placeholders == null || placeholders.length == 0 || placeholders.length % 2 != 0) {
             return rawText;
         }

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record YamlValue(@Nullable Object value) {
 
@@ -127,15 +126,31 @@ public record YamlValue(@Nullable Object value) {
         if (value == null) return Collections.emptyList();
 
         if (!(value instanceof List<?> list)) {
-            throw new IllegalStateException("Value is not a list: " + value);
+            throw new IllegalStateException(
+                    "Expected list, but got " + value.getClass().getSimpleName() + ": " + value
+            );
         }
 
         return list.stream()
                 .map(v -> new YamlValue(v).getAs(type))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public <T> List<T> getAsList(Class<T> type, List<T> def) {
         return value == null ? def : getAsList(type);
+    }
+
+    public boolean isList() {
+        return value instanceof List<?>;
+    }
+
+    public List<YamlValue> asList() {
+        if (!(value instanceof List<?> list)) {
+            throw new IllegalStateException("Value is not a list: " + value);
+        }
+
+        return list.stream()
+                .map(YamlValue::new)
+                .toList();
     }
 }

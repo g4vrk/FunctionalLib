@@ -9,6 +9,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,6 +46,18 @@ public final class ActionExecutor {
         List<String> rawList = PlaceholderAPI.setPlaceholders(player, configuration.getStringList(path)) ;
 
         executeActions(path, player, rawList);
+    }
+
+    public void runAction(String actionLine, Player player, @Nullable Object... placeholders) {
+        String line = actionLine;
+
+        line = PlaceholderAPI.setPlaceholders(player, line);
+
+        if (placeholders != null) {
+            line = ReplaceUtil.format(line, placeholders);
+        }
+
+        executeActions("direct", player, List.of(line));
     }
 
     private void executeActions(String path, Player player, List<String> rawList) {

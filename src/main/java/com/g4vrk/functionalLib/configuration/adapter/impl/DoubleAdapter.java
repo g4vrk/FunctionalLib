@@ -10,8 +10,8 @@ public class DoubleAdapter implements Adapter<Double> {
 
     @Override
     public Double adapt(Object value) {
-        if (value instanceof Double d) {
-            return d;
+        if (value instanceof Number number) {
+            return number.doubleValue();
         }
 
         return Double.valueOf(value.toString());
