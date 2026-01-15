@@ -11,8 +11,10 @@ public class ConfigurationSectionAdapter implements Adapter<ConfigurationSection
 
     @Override
     public ConfigurationSection adapt(Object value) {
-        if (value instanceof ConfigurationSection configurationSection) {
-            return configurationSection;
+        if (value == null) return null;
+
+        if (value instanceof ConfigurationSection section) {
+            return section;
         }
 
         throw new IllegalStateException("Value is not ConfigurationSection: " + value);

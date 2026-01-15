@@ -17,9 +17,10 @@ import java.util.List;
 
 public abstract class AbstractCommand implements CommandExecutor, TabCompleter {
 
-    protected void registerCommand(String commandName, JavaPlugin plugin) {
+    protected void registerCommand(String commandName, JavaPlugin plugin, boolean forceRegister) {
         CommandBuilder.builder()
                 .plugin(plugin)
+                .forceRegister(forceRegister)
                 .name(commandName)
                 .permission(getPermission())
                 .aliases(getAliases())

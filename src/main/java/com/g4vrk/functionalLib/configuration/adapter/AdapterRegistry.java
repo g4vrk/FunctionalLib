@@ -42,7 +42,7 @@ public final class AdapterRegistry {
             throw new IllegalStateException("No Adapter registered for type: " + type.getName());
         }
 
-        return adapter.adapt(value);
+        return adapter.adapt(value.value());
     }
 
     public static <T> List<T> getAsList(YamlValue value, Class<T> type) {

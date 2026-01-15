@@ -1,5 +1,6 @@
 package com.g4vrk.functionalLib.util.command;
 
+import com.g4vrk.functionalLib.FunctionalLibPlugin;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
@@ -45,10 +46,7 @@ public class CommandBuilder {
             command = plugin.getCommand(name);
         } else {
             command = CommandUtil.create(name, plugin);
-            CommandUtil.register(plugin, command);
         }
-
-        if (command == null) return;
 
         command.setDescription(description);
         command.setUsage(usage.isEmpty() ? "/" + name : usage);
@@ -63,5 +61,9 @@ public class CommandBuilder {
         if (tabCompleter != null) {
             command.setTabCompleter(tabCompleter);
         }
+
+        FunctionalLibPlugin.logger().info("Регистрация команды {}...", command.getLabel());
+        CommandUtil.register(plugin, command);
+        FunctionalLibPlugin.logger().info("Успешно зарегистрирована команда {} плагином {}", command.getLabel(), plugin.getName());
     }
 }
