@@ -61,9 +61,10 @@ public class CommandBuilder {
         if (tabCompleter != null) {
             command.setTabCompleter(tabCompleter);
         }
-
-        FunctionalLibPlugin.logger().info("Регистрация команды {}...", command.getLabel());
         CommandUtil.register(plugin, command);
-        FunctionalLibPlugin.logger().info("Успешно зарегистрирована команда {} плагином {}", command.getLabel(), plugin.getName());
+        FunctionalLibPlugin.logger().info("Команда /{} (Алиасы: {}) успешно зарегистрирована плагином {}.",
+                command.getLabel(),
+                String.join(", ", command.getAliases()),
+                plugin.getName());
     }
 }
