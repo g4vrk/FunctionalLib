@@ -4,8 +4,10 @@ import com.g4vrk.functionalLib.menu.listener.MenuClickListener;
 import com.g4vrk.functionalLib.util.MinecraftVersion;
 import lombok.Getter;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Getter
 public final class FunctionalLibPlugin extends BasePlugin {
@@ -13,19 +15,20 @@ public final class FunctionalLibPlugin extends BasePlugin {
     @Getter
     private static FunctionalLibPlugin instance;
     private static Logger log;
-    private final MinecraftVersion minecraftVersion = MinecraftVersion.current();
+
+    public static final String NAME = "FunctionalLib";
 
     private BukkitAudiences audiences;
 
-    public FunctionalLibPlugin() {
-        instance = this;
-        log = getSLF4JLogger();
-    }
-
     @Override
     public void onEnabling() {
+        instance = this;
+        BasePlugin.setLib(this);
+        log = getSLF4JLogger();
         audiences = BukkitAudiences.create(this);
         new MenuClickListener().registerEvents(this);
+
+        MinecraftVersion minecraftVersion = MinecraftVersion.current();
         if (MinecraftVersion.below(MinecraftVersion.v1_16_5)) {
             log.error("Вы используете не поддерживаемую версию! ({}.{}.{})",
                     minecraftVersion.getMajor(),
@@ -42,9 +45,9 @@ public final class FunctionalLibPlugin extends BasePlugin {
         }
     }
 
-    public static @Nullable Logger logger() {
+    public static @NotNull Logger logger() {
         if (log == null) {
-            getInstance().getSLF4JLogger().error("Логгер не был инициализирован. Используйте logger() после инициализации плагина FunctionalLib");
+            return log = LoggerFactory.getLogger(NAME);
         }
         return log;
     }
