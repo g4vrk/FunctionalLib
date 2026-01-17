@@ -9,7 +9,7 @@ import java.io.File;
 public abstract class BasePlugin extends JavaPlugin {
 
     protected final PluginManager pluginManager = Bukkit.getPluginManager();
-    protected final FunctionalLibPlugin functionalLib = FunctionalLibPlugin.getInstance();
+    protected static FunctionalLibPlugin functionalLib;
 
     public abstract void onEnabling();
 
@@ -32,7 +32,7 @@ public abstract class BasePlugin extends JavaPlugin {
     }
 
     protected boolean checkLib() {
-        if (pluginManager.getPlugin(functionalLib.getName()) == null) {
+        if (pluginManager.getPlugin(FunctionalLibPlugin.NAME) == null) {
             getSLF4JLogger().error("Плагин FunctionalLib не найден!");
             getSLF4JLogger().error("Скачайте его для работы плагина.");
             getSLF4JLogger().error("Репозиторий github -> https://github.com/g4vrk/FunctionalLib");
@@ -40,5 +40,13 @@ public abstract class BasePlugin extends JavaPlugin {
             return false;
         }
         return true;
+    }
+
+    public static void setLib(FunctionalLibPlugin functionalLibPlugin) {
+        if (functionalLib != null) {
+            FunctionalLibPlugin.logger().error("Библиотека не может быть инициализирована дважды");
+            return;
+        }
+        functionalLib = functionalLibPlugin;
     }
 }
