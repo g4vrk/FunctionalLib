@@ -16,34 +16,34 @@ import java.time.Duration;
 @UtilityClass
 public class SendUtil {
 
-    private final BukkitAudiences audiences = FunctionalLibPlugin.getInstance().getAudiences();
+    private final BukkitAudiences AUDIENCES = FunctionalLibPlugin.getInstance().getAudiences();
 
     public void sendMessage(Player player, Component component) {
-        audiences.player(player).sendMessage(component);
+        AUDIENCES.player(player).sendMessage(component);
     }
 
     public void sendMessage(Player player, String string) {
-        audiences.player(player).sendMessage(TextUtil.format(string));
+        AUDIENCES.player(player).sendMessage(TextUtil.format(string));
     }
 
     public void sendMessage(CommandSender sender, Component component) {
-        audiences.sender(sender).sendMessage(component);
+        AUDIENCES.sender(sender).sendMessage(component);
     }
 
     public void sendMessage(CommandSender sender, String string) {
-        audiences.sender(sender).sendMessage(TextUtil.format(string));
+        AUDIENCES.sender(sender).sendMessage(TextUtil.format(string));
     }
 
     public void sendActionBar(Player player, Component component) {
-        audiences.player(player).sendActionBar(component);
+        AUDIENCES.player(player).sendActionBar(component);
     }
 
     public void sendActionBar(Player player, String string) {
-        audiences.player(player).sendActionBar(TextUtil.format(string));
+        AUDIENCES.player(player).sendActionBar(TextUtil.format(string));
     }
 
     public void sendTitle(Player player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {
-        audiences.player(player).showTitle(
+        AUDIENCES.player(player).showTitle(
                 Title.title(
                         title,
                         subtitle,
@@ -57,7 +57,7 @@ public class SendUtil {
     }
 
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        audiences.player(player).showTitle(
+        AUDIENCES.player(player).showTitle(
                 Title.title(
                         TextUtil.format(title),
                         TextUtil.format(subtitle),
@@ -71,11 +71,11 @@ public class SendUtil {
     }
 
     public void playSound(Player player, Sound sound) {
-        audiences.player(player).playSound(sound);
+        AUDIENCES.player(player).playSound(sound);
     }
 
     public void playSound(Player player, org.bukkit.Sound sound) {
-        audiences.player(player).playSound(
+        AUDIENCES.player(player).playSound(
                 Sound.sound(
                         Key.key(sound.getKey().asString()),
                         Sound.Source.PLAYER,

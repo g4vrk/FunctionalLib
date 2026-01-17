@@ -23,4 +23,3 @@ public class DatabaseService {
                 .connect().orElse(null);
     }
 }
-
