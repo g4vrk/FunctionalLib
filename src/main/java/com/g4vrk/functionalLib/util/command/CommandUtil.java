@@ -1,5 +1,7 @@
 package com.g4vrk.functionalLib.util.command;
 
+import com.g4vrk.functionalLib.util.MinecraftVersion;
+import com.g4vrk.functionalLib.util.Reflect;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -8,55 +10,58 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.Map;
 
 @UtilityClass
 public final class CommandUtil {
 
-    private static final CommandMap COMMAND_MAP;
+    private static final CommandMap COMMAND_MAP = resolveCommandMap();
 
-    static {
-        try {
-            Server server = Bukkit.getServer();
-
-            Field field = server.getClass().getDeclaredField("commandMap");
-            field.setAccessible(true);
-
-            COMMAND_MAP = (CommandMap) field.get(server);
-        } catch (Throwable e) {
-            throw new RuntimeException("Не удалось получить доступ к CommandMap", e);
+    private static CommandMap resolveCommandMap() {
+        if (MinecraftVersion.isPaper() || MinecraftVersion.isPurpur()) {
+            try {
+                return Bukkit.getCommandMap();
+            } catch (Throwable ignored) {}
         }
+        Server server = Bukkit.getServer();
+        return (CommandMap) Reflect.getFieldValue(server, "commandMap");
     }
 
     public static PluginCommand create(String name, Plugin plugin) {
-        try {
-            Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            constructor.setAccessible(true);
-
-            return constructor.newInstance(name, plugin);
-        } catch (Throwable e) {
-            throw new RuntimeException("Не удалось создать PluginCommand", e);
-        }
+        return Reflect.newInstance(PluginCommand.class, name, plugin);
     }
 
     public static void register(Plugin plugin, PluginCommand command) {
+        unregister(command.getName());
         COMMAND_MAP.register(plugin.getName().toLowerCase(), command);
     }
 
     public static void unregister(String name) {
-        try {
-            Field field = COMMAND_MAP.getClass().getDeclaredField("knownCommands");
-            field.setAccessible(true);
+        Map<String, Command> known = getKnownCommands();
 
-            @SuppressWarnings("unchecked")
-            Map<String, Command> known = (Map<String, Command>) field.get(COMMAND_MAP);
+        Iterator<Map.Entry<String, Command>> it = known.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Command> entry = it.next();
 
-            known.remove(name);
-            known.remove("minecraft:" + name);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+            String key = entry.getKey();
+            Command command = entry.getValue();
+
+            if (matches(key, name) || command.getName().equalsIgnoreCase(name)) {
+                command.unregister(COMMAND_MAP);
+                it.remove();
+            }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, Command> getKnownCommands() {
+        return (Map<String, Command>) Reflect.getFieldValue(COMMAND_MAP, "knownCommands");
+    }
+
+    private static boolean matches(String key, String name) {
+        return key.equalsIgnoreCase(name)
+                || key.equalsIgnoreCase("minecraft:" + name)
+                || key.endsWith(":" + name);
     }
 }
