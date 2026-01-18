@@ -20,24 +20,55 @@ public class PaperLogger implements PluginLogger {
     }
 
     @Override
-    public void log(LogLevel logLevel, Component message) {
-        if (logLevel == LogLevel.DEBUG && !debug) return;
-        switch (logLevel) {
-            case INFO -> logger.info(message);
-            case WARNING -> logger.warn(message);
-            case ERROR -> logger.error(message);
-            case DEBUG -> logger.debug(message);
+    public void log(LogLevel level, Component message) {
+        log(level, message, null);
+    }
+
+    @Override
+    public void log(LogLevel level, Component message, Throwable throwable) {
+        if (level == LogLevel.DEBUG && !debug) return;
+
+        switch (level) {
+            case INFO -> {
+                if (throwable == null) logger.info(message);
+                else logger.info(message, throwable);
+            }
+            case WARNING -> {
+                if (throwable == null) logger.warn(message);
+                else logger.warn(message, throwable);
+            }
+            case ERROR -> {
+                if (throwable == null) logger.error(message);
+                else logger.error(message, throwable);
+            }
+            case DEBUG -> {
+                if (throwable == null) logger.debug(message);
+                else logger.debug(message, throwable);
+            }
         }
     }
 
     @Override
-    public void log(LogLevel logLevel, Component message , Throwable throwable) {
-        if (logLevel == LogLevel.DEBUG && !debug) return;
-        switch (logLevel) {
-            case INFO -> logger.info(message, throwable);
-            case WARNING -> logger.warn(message, throwable);
-            case ERROR -> logger.error(message, throwable);
-            case DEBUG -> logger.debug(message, throwable);
+    public void log(LogLevel level, String message, Object... args) {
+        if (level == LogLevel.DEBUG && !debug) return;
+
+        switch (level) {
+            case INFO -> logger.info(message, args);
+            case WARNING -> logger.warn(message, args);
+            case ERROR -> logger.error(message, args);
+            case DEBUG -> logger.debug(message, args);
+        }
+    }
+
+    @Override
+    public void log(LogLevel level, String message, Throwable throwable, Object... args) {
+        if (level == LogLevel.DEBUG && !debug) return;
+
+        switch (level) {
+            case INFO -> logger.info(message, args, throwable);
+            case WARNING -> logger.warn(message, args, throwable);
+            case ERROR -> logger.error(message, args, throwable);
+            case DEBUG -> logger.debug(message, args, throwable);
         }
     }
 
@@ -52,13 +83,8 @@ public class PaperLogger implements PluginLogger {
     }
 
     @Override
-    public void error(Component message) {
-        log(LogLevel.ERROR, message);
-    }
-
-    @Override
-    public void error(Component message, Throwable throwable) {
-        log(LogLevel.ERROR, message, throwable);
+    public void info(String message, Object... args) {
+        log(LogLevel.INFO, message, args);
     }
 
     @Override
@@ -72,13 +98,23 @@ public class PaperLogger implements PluginLogger {
     }
 
     @Override
-    public void setDebug(boolean value) {
-        this.debug = value;
+    public void warn(String message, Object... args) {
+        log(LogLevel.WARNING, message, args);
     }
 
     @Override
-    public boolean isDebug() {
-        return debug;
+    public void error(Component message) {
+        log(LogLevel.ERROR, message);
+    }
+
+    @Override
+    public void error(Component message, Throwable throwable) {
+        log(LogLevel.ERROR, message, throwable);
+    }
+
+    @Override
+    public void error(String message, Object... args) {
+        log(LogLevel.ERROR, message, args);
     }
 
     @Override
@@ -89,5 +125,20 @@ public class PaperLogger implements PluginLogger {
     @Override
     public void debug(Component message, Throwable throwable) {
         log(LogLevel.DEBUG, message, throwable);
+    }
+
+    @Override
+    public void debug(String message, Object... args) {
+        log(LogLevel.DEBUG, message, args);
+    }
+
+    @Override
+    public void setDebug(boolean value) {
+        this.debug = value;
+    }
+
+    @Override
+    public boolean isDebug() {
+        return debug;
     }
 }

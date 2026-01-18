@@ -1,7 +1,7 @@
 package com.g4vrk.functionalLib.logging.impl;
 
-import com.g4vrk.functionalLib.logging.PluginLogger;
 import com.g4vrk.functionalLib.logging.LogLevel;
+import com.g4vrk.functionalLib.logging.PluginLogger;
 import com.g4vrk.functionalLib.util.text.TextUtil;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
@@ -22,24 +22,57 @@ public class BukkitLogger implements PluginLogger {
     }
 
     @Override
-    public void log(LogLevel logLevel, Component message) {
-        if (logLevel == LogLevel.DEBUG && !debug) return;
-        switch (logLevel) {
-            case INFO -> logger.info(TextUtil.plain(message));
-            case WARNING -> logger.warn(TextUtil.plain(message));
-            case ERROR -> logger.error(TextUtil.plain(message));
-            case DEBUG -> logger.debug(TextUtil.plain(message));
+    public void log(LogLevel level, Component message) {
+        log(level, message, null);
+    }
+
+    @Override
+    public void log(LogLevel level, Component message, Throwable throwable) {
+        if (level == LogLevel.DEBUG && !debug) return;
+
+        String plain = TextUtil.plain(message);
+
+        switch (level) {
+            case INFO -> {
+                if (throwable == null) logger.info(plain);
+                else logger.info(plain, throwable);
+            }
+            case WARNING -> {
+                if (throwable == null) logger.warn(plain);
+                else logger.warn(plain, throwable);
+            }
+            case ERROR -> {
+                if (throwable == null) logger.error(plain);
+                else logger.error(plain, throwable);
+            }
+            case DEBUG -> {
+                if (throwable == null) logger.debug(plain);
+                else logger.debug(plain, throwable);
+            }
         }
     }
 
     @Override
-    public void log(LogLevel logLevel, Component message , Throwable throwable) {
-        if (logLevel == LogLevel.DEBUG && !debug) return;
-        switch (logLevel) {
-            case INFO -> logger.info(TextUtil.plain(message), throwable);
-            case WARNING -> logger.warn(TextUtil.plain(message), throwable);
-            case ERROR -> logger.error(TextUtil.plain(message), throwable);
-            case DEBUG -> logger.debug(TextUtil.plain(message), throwable);
+    public void log(LogLevel level, String message, Object... args) {
+        if (level == LogLevel.DEBUG && !debug) return;
+
+        switch (level) {
+            case INFO -> logger.info(message, args);
+            case WARNING -> logger.warn(message, args);
+            case ERROR -> logger.error(message, args);
+            case DEBUG -> logger.debug(message, args);
+        }
+    }
+
+    @Override
+    public void log(LogLevel level, String message, Throwable throwable, Object... args) {
+        if (level == LogLevel.DEBUG && !debug) return;
+
+        switch (level) {
+            case INFO -> logger.info(message, args, throwable);
+            case WARNING -> logger.warn(message, args, throwable);
+            case ERROR -> logger.error(message, args, throwable);
+            case DEBUG -> logger.debug(message, args, throwable);
         }
     }
 
@@ -54,13 +87,8 @@ public class BukkitLogger implements PluginLogger {
     }
 
     @Override
-    public void error(Component message) {
-        log(LogLevel.ERROR, message);
-    }
-
-    @Override
-    public void error(Component message, Throwable throwable) {
-        log(LogLevel.ERROR, message, throwable);
+    public void info(String message, Object... args) {
+        log(LogLevel.INFO, message, args);
     }
 
     @Override
@@ -74,13 +102,23 @@ public class BukkitLogger implements PluginLogger {
     }
 
     @Override
-    public void setDebug(boolean value) {
-        this.debug = value;
+    public void warn(String message, Object... args) {
+        log(LogLevel.WARNING, message, args);
     }
 
     @Override
-    public boolean isDebug() {
-        return debug;
+    public void error(Component message) {
+        log(LogLevel.ERROR, message);
+    }
+
+    @Override
+    public void error(Component message, Throwable throwable) {
+        log(LogLevel.ERROR, message, throwable);
+    }
+
+    @Override
+    public void error(String message, Object... args) {
+        log(LogLevel.ERROR, message, args);
     }
 
     @Override
@@ -91,5 +129,20 @@ public class BukkitLogger implements PluginLogger {
     @Override
     public void debug(Component message, Throwable throwable) {
         log(LogLevel.DEBUG, message, throwable);
+    }
+
+    @Override
+    public void debug(String message, Object... args) {
+        log(LogLevel.DEBUG, message, args);
+    }
+
+    @Override
+    public void setDebug(boolean value) {
+        this.debug = value;
+    }
+
+    @Override
+    public boolean isDebug() {
+        return debug;
     }
 }
