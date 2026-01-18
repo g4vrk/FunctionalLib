@@ -2,7 +2,10 @@ package com.g4vrk.functionalLib.util;
 
 import com.g4vrk.functionalLib.FunctionalLibPlugin;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,6 +87,18 @@ public enum MinecraftVersion {
 
     public boolean isBelow(MinecraftVersion other) {
         return compareTo(other) < 0;
+    }
+
+    public static boolean hasComponentLogger() {
+        return Reflect.hasClass("net.kyori.adventure.text.logger.slf4j.ComponentLogger") && Reflect.hasMethod(JavaPlugin.class, "getComponentLogger");
+    }
+
+    public static boolean hasAdventureApi() {
+        return Reflect.hasClass("net.kyori.adventure.text.Component");
+    }
+
+    public static boolean hasNativeAdventureAudience() {
+        return Reflect.hasMethod(Player.class, "sendMessage", Component.class);
     }
 
     public static boolean isPaper() {
