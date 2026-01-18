@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @UtilityClass
 public class TextUtil {
+
+    private static final PlainTextComponentSerializer PLAIN_SERIALIZER =
+            PlainTextComponentSerializer.plainText();
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
@@ -82,6 +86,26 @@ public class TextUtil {
     public static @NotNull List<String> formatListLegacy(@NotNull List<String> rawList) {
         return rawList.stream()
                 .map(TextUtil::formatLegacy)
+                .toList();
+    }
+
+    public static @NotNull String plain(@NotNull String rawText) {
+        return PLAIN_SERIALIZER.serialize(format(rawText));
+    }
+
+    public static @NotNull String plain(@NotNull Component component) {
+        return PLAIN_SERIALIZER.serialize(component);
+    }
+
+    public static @NotNull List<String> plainList(@NotNull List<String> rawList) {
+        return rawList.stream()
+                .map(TextUtil::plain)
+                .toList();
+    }
+
+    public static @NotNull List<String> plainComponentList(@NotNull List<Component> components) {
+        return components.stream()
+                .map(TextUtil::plain)
                 .toList();
     }
 }
