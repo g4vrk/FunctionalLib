@@ -71,13 +71,17 @@ public class Reflect {
 
         return METHOD_CACHE.computeIfAbsent(key, k -> {
             try {
-                Method m = clazz.getDeclaredMethod(name, params);
-                m.setAccessible(true);
-                return m;
-            } catch (Exception e) {
-                throw new IllegalStateException(
-                        "Method not found: " + clazz.getName() + "." + name, e
-                );
+                return clazz.getMethod(name, params);
+            } catch (NoSuchMethodException e) {
+                try {
+                    Method m = clazz.getDeclaredMethod(name, params);
+                    m.setAccessible(true);
+                    return m;
+                } catch (NoSuchMethodException ignored) {
+                    throw new IllegalStateException(
+                            "Method not found: " + clazz.getName() + "." + name, e
+                    );
+                }
             }
         });
     }
@@ -146,6 +150,57 @@ public class Reflect {
         } catch (Exception e) {
             throw new IllegalStateException("Cannot set field " + name, e);
         }
+    }
+
+    public static boolean hasClass(String clazzName) {
+        try {
+            Class.forName(clazzName);
+            return true;
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
+    public static boolean hasMethod(Class<?> clazz, String name, Class<?>... params) {
+        try {
+            clazz.getMethod(name, params);
+            return true;
+        } catch (NoSuchMethodException ignored) {
+            try {
+                clazz.getDeclaredMethod(name, params);
+                return true;
+            } catch (NoSuchMethodException ignored2) {
+                return false;
+            }
+        }
+    }
+
+    public static boolean hasConstructor(Class<?> clazz, Class<?>... params) {
+        try {
+            clazz.getConstructor(params);
+            return true;
+        } catch (NoSuchMethodException ignored) {
+            try {
+                clazz.getDeclaredConstructor(params);
+                return true;
+            } catch (NoSuchMethodException ignored2) {
+                return false;
+            }
+        }
+    }
+
+    public static boolean hasField(Class<?> clazz, String name) {
+        Class<?> search = clazz;
+
+        while (search != null) {
+            try {
+                search.getDeclaredField(name);
+                return true;
+            } catch (NoSuchFieldException ignored) {
+                search = search.getSuperclass();
+            }
+        }
+        return false;
     }
 
     private static Class<?>[] types(Object[] args) {
