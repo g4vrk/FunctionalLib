@@ -1,0 +1,30 @@
+package com.g4vrk.functionalLib.util.formatter;
+
+/**
+ * Данный класс является типом
+ * формата текста, используется в {@link TextFormatter}
+ */
+public enum TextFormatType {
+
+    /**
+     * Только legacy -> {@link net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer}
+     *
+     * Форматы: &c &#RRGGBB &x&R&R&G&G&B&B и такие же, но с '§'
+     */
+    LEGACY,
+
+    /**
+     * Только MiniMessage -> {@link net.kyori.adventure.text.minimessage.MiniMessage}
+     *
+     * Форматы: Все которые поддерживает MiniMessage
+     */
+    MINI_MESSAGE,
+
+    /**
+     * Legacy + MiniMessage вместе,
+     * но как правило этот вариант
+     * тяжелый в плане оптимизации
+     */
+    MIXED
+}
+
