@@ -1,0 +1,5 @@
+jdk:
+  - openjdk16
+
+install:
+  - ./mvnw clean install -DskipTests
