@@ -50,7 +50,7 @@ public class YamlConfig implements Configuration {
 
 
     private void load() {
-        rootSection = null;
+        rootSection = new YamlConfiguration();
         try {
             YamlConfiguration yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(configFile);

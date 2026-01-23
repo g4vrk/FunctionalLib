@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-// писал гпт я не ебу как рефлексию делать, а он нужен для утилы по командам
 @UtilityClass
 public class Reflect {
 

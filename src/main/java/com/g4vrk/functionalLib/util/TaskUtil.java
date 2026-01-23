@@ -13,31 +13,31 @@ import java.util.function.Consumer;
 @UtilityClass
 public class TaskUtil {
 
-    private static final FunctionalLibPlugin plugin = FunctionalLibPlugin.getInstance();
+    private static final FunctionalLibPlugin PLUGIN = FunctionalLibPlugin.getInstance();
     private static final BukkitScheduler BUKKIT_SCHEDULER = Bukkit.getScheduler();
 
     public static BukkitTask runSync(@NotNull Runnable runnable) {
-        return BUKKIT_SCHEDULER.runTask(plugin, runnable);
+        return BUKKIT_SCHEDULER.runTask(PLUGIN, runnable);
     }
 
     public static BukkitTask runAsync(@NotNull Runnable runnable) {
-        return BUKKIT_SCHEDULER.runTaskAsynchronously(plugin, runnable);
+        return BUKKIT_SCHEDULER.runTaskAsynchronously(PLUGIN, runnable);
     }
 
     public static BukkitTask runLater(@NotNull Runnable runnable, long delayTicks) {
-        return BUKKIT_SCHEDULER.runTaskLater(plugin, runnable, delayTicks);
+        return BUKKIT_SCHEDULER.runTaskLater(PLUGIN, runnable, delayTicks);
     }
 
     public static BukkitTask runLaterAsync(@NotNull Runnable runnable, long delayTicks) {
-        return BUKKIT_SCHEDULER.runTaskLaterAsynchronously(plugin, runnable, delayTicks);
+        return BUKKIT_SCHEDULER.runTaskLaterAsynchronously(PLUGIN, runnable, delayTicks);
     }
 
     public static BukkitTask runTimer(@NotNull Runnable runnable, long delayTicks, long periodTicks) {
-        return BUKKIT_SCHEDULER.runTaskTimer(plugin, runnable, delayTicks, periodTicks);
+        return BUKKIT_SCHEDULER.runTaskTimer(PLUGIN, runnable, delayTicks, periodTicks);
     }
 
     public static BukkitTask runTimerAsync(@NotNull Runnable runnable, long delayTicks, long periodTicks) {
-        return BUKKIT_SCHEDULER.runTaskTimerAsynchronously(plugin, runnable, delayTicks, periodTicks);
+        return BUKKIT_SCHEDULER.runTaskTimerAsynchronously(PLUGIN, runnable, delayTicks, periodTicks);
     }
 
     public static BukkitTask runRepeating(@NotNull Runnable runnable, long periodTicks) {
@@ -55,7 +55,7 @@ public class TaskUtil {
                 consumer.accept(this);
             }
         };
-        return runnable.runTask(plugin);
+        return runnable.runTask(PLUGIN);
     }
 
     public static BukkitTask runAsync(@NotNull Consumer<BukkitRunnable> consumer) {
@@ -65,7 +65,7 @@ public class TaskUtil {
                 consumer.accept(this);
             }
         };
-        return runnable.runTaskAsynchronously(plugin);
+        return runnable.runTaskAsynchronously(PLUGIN);
     }
 
     public static BukkitTask runLater(@NotNull Consumer<BukkitRunnable> consumer, long delayTicks) {
@@ -75,7 +75,7 @@ public class TaskUtil {
                 consumer.accept(this);
             }
         };
-        return runnable.runTaskLater(plugin, delayTicks);
+        return runnable.runTaskLater(PLUGIN, delayTicks);
     }
 
     public static BukkitTask runTimer(@NotNull Consumer<BukkitRunnable> consumer, long delayTicks, long periodTicks) {
@@ -85,6 +85,6 @@ public class TaskUtil {
                 consumer.accept(this);
             }
         };
-        return runnable.runTaskTimer(plugin, delayTicks, periodTicks);
+        return runnable.runTaskTimer(PLUGIN, delayTicks, periodTicks);
     }
 }

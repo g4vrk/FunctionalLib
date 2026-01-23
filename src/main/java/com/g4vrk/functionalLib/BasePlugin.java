@@ -26,7 +26,6 @@ public abstract class BasePlugin extends JavaPlugin {
 
         long startupTime = System.currentTimeMillis() - startTime;
 
-
         getSLF4JLogger().info("Плагин {} был успешно включен! ({} мс)", getName() + " v" + getDescription().getVersion(), startupTime);
         getSLF4JLogger().info("Спасибо за использование! ~{}", String.join(", ", getDescription().getAuthors()));
     }
@@ -44,8 +43,7 @@ public abstract class BasePlugin extends JavaPlugin {
 
     public static void setLib(FunctionalLibPlugin functionalLibPlugin) {
         if (functionalLib != null) {
-            FunctionalLibPlugin.logger().error("Библиотека не может быть инициализирована дважды");
-            return;
+            throw new IllegalArgumentException("FunctionalLib already initialized!");
         }
         functionalLib = functionalLibPlugin;
     }

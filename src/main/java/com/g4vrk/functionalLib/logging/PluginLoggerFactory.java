@@ -5,7 +5,6 @@ import com.g4vrk.functionalLib.logging.impl.PaperLogger;
 import com.g4vrk.functionalLib.util.MinecraftVersion;
 import com.g4vrk.functionalLib.util.text.TextUtil;
 import lombok.experimental.UtilityClass;
-import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @UtilityClass

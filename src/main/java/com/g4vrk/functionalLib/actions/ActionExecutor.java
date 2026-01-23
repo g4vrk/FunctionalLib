@@ -9,7 +9,6 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +31,7 @@ public final class ActionExecutor {
     public ActionExecutor() {
     }
 
+    @Deprecated(forRemoval = true)
     public void runActions(String path, Player player, Configuration configuration, @Nullable Object[] placeholders) {
         List<String> rawList = PlaceholderAPI.setPlaceholders(player, configuration.getStringList(path)) ;
 
@@ -39,13 +39,30 @@ public final class ActionExecutor {
             rawList = ReplaceUtil.formatStringList(rawList, placeholders);
         }
 
-        executeActions(path, player, rawList);
+        executeActions(player, rawList);
     }
 
+    @Deprecated(forRemoval = true)
     public void runActions(String path, Player player, Configuration configuration) {
         List<String> rawList = PlaceholderAPI.setPlaceholders(player, configuration.getStringList(path)) ;
 
-        executeActions(path, player, rawList);
+        executeActions(player, rawList);
+    }
+
+    public void runActions(Player player, List<String> actionList, @Nullable Object[] placeholders) {
+        List<String> list = PlaceholderAPI.setPlaceholders(player, actionList);
+
+        if (placeholders != null && placeholders.length != 0) {
+            list = ReplaceUtil.formatStringList(list, placeholders);
+        }
+
+        executeActions(player, list);
+    }
+
+    public void runActions(Player player, List<String> actionList) {
+        List<String> list = PlaceholderAPI.setPlaceholders(player, actionList);
+
+        executeActions(player, list);
     }
 
     public void runAction(String actionLine, Player player, @Nullable Object... placeholders) {
@@ -57,19 +74,19 @@ public final class ActionExecutor {
             line = ReplaceUtil.format(line, placeholders);
         }
 
-        executeActions("direct", player, List.of(line));
+        executeActions(player, List.of(line));
     }
 
-    private void executeActions(String path, Player player, List<String> rawList) {
-        for (String array : rawList) {
-            String[] parts = array.split(" ", 2);
+    private void executeActions(Player player, List<String> actionList) {
+        for (String actionStr : actionList) {
+            String[] parts = actionStr.split(" ", 2);
 
             String actionKey = parts[0].toLowerCase();
             String args = parts.length > 1 ? parts[1] : "";
 
             Action action = actionMap.get(actionKey);
             if (action == null) {
-                FunctionalLibPlugin.getInstance().getSLF4JLogger().error("Не найдено действие: {} (путь: {})", actionKey, path);
+                FunctionalLibPlugin.getInstance().getSLF4JLogger().error("Неизвестное действие: {}", actionKey);
                 continue;
             }
 

@@ -46,5 +46,4 @@ public class AddonDescription {
             authors.add(author);
         }
     }
-
 }

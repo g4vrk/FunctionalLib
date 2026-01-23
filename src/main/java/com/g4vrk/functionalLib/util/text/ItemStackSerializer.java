@@ -11,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-//тоже гпт писал, мне сериализация много где нужна но опять же не ебу как писать ее, тут вроде нормальный обычный код
 @UtilityClass
 public class ItemStackSerializer {
 

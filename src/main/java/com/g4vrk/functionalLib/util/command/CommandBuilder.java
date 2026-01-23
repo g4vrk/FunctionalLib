@@ -48,6 +48,8 @@ public class CommandBuilder {
             command = CommandUtil.create(name, plugin);
         }
 
+        if (command == null) return;
+
         command.setDescription(description);
         command.setUsage(usage.isEmpty() ? "/" + name : usage);
         command.setPermission(permission);

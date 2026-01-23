@@ -25,56 +25,20 @@ public class TextUtil {
             .character(ChatColor.COLOR_CHAR)
             .build();
 
-    private static final Map<Character, String> CHAR_TO_MINI_MESSAGE = new ConcurrentHashMap<>();
+    private static final Map<String, Component> CACHED_COMPONENTS = new ConcurrentHashMap<>();
+    private static final Map<String, String> CACHED_STRINGS = new ConcurrentHashMap<>();
 
-    static {
-        CHAR_TO_MINI_MESSAGE.put('0', "<black>");
-        CHAR_TO_MINI_MESSAGE.put('1', "<dark_blue>");
-        CHAR_TO_MINI_MESSAGE.put('2', "<dark_green>");
-        CHAR_TO_MINI_MESSAGE.put('3', "<dark_aqua>");
-        CHAR_TO_MINI_MESSAGE.put('4', "<dark_red>");
-        CHAR_TO_MINI_MESSAGE.put('5', "<dark_purple>");
-        CHAR_TO_MINI_MESSAGE.put('6', "<gold>");
-        CHAR_TO_MINI_MESSAGE.put('7', "<gray>");
-        CHAR_TO_MINI_MESSAGE.put('8', "<dark_gray>");
-        CHAR_TO_MINI_MESSAGE.put('9', "<blue>");
-        CHAR_TO_MINI_MESSAGE.put('a', "<green>");
-        CHAR_TO_MINI_MESSAGE.put('b', "<aqua>");
-        CHAR_TO_MINI_MESSAGE.put('c', "<red>");
-        CHAR_TO_MINI_MESSAGE.put('d', "<light_purple>");
-        CHAR_TO_MINI_MESSAGE.put('e', "<yellow>");
-        CHAR_TO_MINI_MESSAGE.put('f', "<white>");
-        CHAR_TO_MINI_MESSAGE.put('k', "<obfuscated>");
-        CHAR_TO_MINI_MESSAGE.put('l', "<bold>");
-        CHAR_TO_MINI_MESSAGE.put('m', "<strikethrough>");
-        CHAR_TO_MINI_MESSAGE.put('n', "<underlined>");
-        CHAR_TO_MINI_MESSAGE.put('o', "<italic>");
-        CHAR_TO_MINI_MESSAGE.put('r', "<reset>");
+    public static String legacyToMiniMessage(String rawText) {
+        Component component = LEGACY_SERIALIZER.deserialize(rawText.replace('&', ChatColor.COLOR_CHAR));
+        return MINI_MESSAGE.serialize(component);
     }
 
     public static @NotNull Component format(@NotNull String rawText) {
-        rawText = rawText.replaceAll("(?i)&#([A-F0-9]{6})", "<#$1>");
-
-        StringBuilder stringBuilder = new StringBuilder(rawText.length());
-
-        char[] chars = rawText.toCharArray();
-
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == '&' && i + 1 < chars.length) {
-                String tag = CHAR_TO_MINI_MESSAGE.get(Character.toLowerCase(chars[i + 1]));
-
-                if (tag != null) stringBuilder.append(tag);
-                else stringBuilder.append('&').append(chars[i + 1]);
-
-                i++;
-            } else stringBuilder.append(chars[i]);
-        }
-
-        return MINI_MESSAGE.deserialize(stringBuilder.toString());
+        return CACHED_COMPONENTS.computeIfAbsent(rawText, string -> MINI_MESSAGE.deserialize(legacyToMiniMessage(string)));
     }
 
     public static @NotNull String formatLegacy(@NotNull String rawText) {
-        return LEGACY_SERIALIZER.serialize(LEGACY_SERIALIZER.deserialize(rawText));
+        return CACHED_STRINGS.computeIfAbsent(rawText, string -> LEGACY_SERIALIZER.serialize(format(string)));
     }
 
     public static @NotNull List<Component> formatList(@NotNull List<String> rawList) {

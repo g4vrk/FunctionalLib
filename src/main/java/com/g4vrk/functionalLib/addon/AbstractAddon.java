@@ -2,12 +2,14 @@ package com.g4vrk.functionalLib.addon;
 
 import com.g4vrk.functionalLib.configuration.Configuration;
 import com.g4vrk.functionalLib.configuration.yaml.YamlConfig;
+import com.g4vrk.functionalLib.configuration.yaml.YamlConfigFactory;
 import com.g4vrk.functionalLib.logging.PluginLogger;
 import com.g4vrk.functionalLib.logging.PluginLoggerFactory;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +44,7 @@ public class AbstractAddon {
         this.enabled = enabled;
 
         if (enabled) {
-            logger.info("Включение аддона " + description.getName() + " v" + description.getVersion());
+            logger.info("Включение аддона {} v{}", description.getName(), description.getVersion());
             onEnable();
         } else {
             logger.info("Выключение аддона {}", description.getName());
@@ -54,16 +56,17 @@ public class AbstractAddon {
         return parent;
     }
 
-    public Configuration getResource(String fileName) {
+    public @Nullable Configuration getResource(String fileName) {
         return configs.computeIfAbsent(fileName, name -> {
             try {
                 File file = new File(dataFolder, name);
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                return new YamlConfig(file.getName(), parent);
+
+                return new YamlConfig(file);
             } catch (Throwable e) {
-                LogUtil.throwable(e, "Не удалось загрузить файл " + fileName + " для аддона " + getName());
+                logger.error("Не удалось загрузить файл " + fileName + " для аддона " + getName(), e);
                 return null;
             }
         });
@@ -73,7 +76,7 @@ public class AbstractAddon {
         return dataFolder;
     }
 
-    public final Logger getLogger() {
+    public final PluginLogger getLogger() {
         return logger;
     }
 
