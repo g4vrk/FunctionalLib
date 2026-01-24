@@ -2,8 +2,11 @@ jdk:
   - openjdk17
   - openjdk21
 
+
 before_install:
   - java -version
+  - sdk install maven 3.9.6
+  - sdk use maven 3.9.6
 
 install:
   - mvn install -Dmaven.javadoc.skip=true -DskipTests
