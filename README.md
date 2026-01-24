@@ -178,6 +178,7 @@ public class Example {
     public void example() {
         // Билдер SmartCommand
         SmartCommand smartAbstractCommand = SmartCommand.builder()
+                .name()
                 // Требования, можете создавать свои
                 .requirement(new CommandRequirement() {
                     @Override

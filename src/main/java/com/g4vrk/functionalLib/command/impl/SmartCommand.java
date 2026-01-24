@@ -3,7 +3,6 @@ package com.g4vrk.functionalLib.command.impl;
 import com.g4vrk.functionalLib.command.SmartAbstractCommand;
 import com.g4vrk.functionalLib.command.requirement.CommandRequirement;
 import com.g4vrk.functionalLib.command.subCommand.SubCommand;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
