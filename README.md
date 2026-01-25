@@ -1,27 +1,63 @@
-# FunctionalLib
+<p align="center">
+  <img src="https://via.placeholder.com/1200x300/1e293b/ffffff?text=FunctionalLib" alt="FunctionalLib" width="800"/>
+  <br><br>
+  <img src="https://jitpack.io/v/g4vrk/FunctionalLib.svg" alt="JitPack version"/>
+  <img src="https://img.shields.io/badge/Minecraft-1.16–1.21+-brightgreen" alt="Supported versions"/>
+  <img src="https://img.shields.io/badge/Platform-Paper%20%7C%20Spigot-blue" alt="Platform"/>
+  <img src="https://img.shields.io/badge/Java-17%2B-orange" alt="Java"/>
+</p>
 
-в pom.xml (для Maven):
+<h1 align="center">FunctionalLib</h1>
+
+<p align="center">
+  <strong>Лёгкая и удобная утилитная библиотека</strong> для создания современных плагинов под Paper / Spigot
+</p>
+
+<p align="center">
+  <a href="#установка">Установка</a> •
+  <a href="#основные-возможности">Возможности</a> •
+  <a href="#примеры">Примеры</a> •
+  <a href="#лицензия">Лицензия</a>
+</p>
+
+## Установка
+
+### Maven (JitPack)
+
 ```xml
-<repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-</repository>
-```
-```xml
-<dependency>
-    <groupId>com.github.g4vrk</groupId>
-    <artifactId>FunctionalLib</artifactId>
-    <version>ПОСЛЕДНЯЯ_ВЕРСИЯ</version>
-    <scope>provided</scope>
-</dependency>
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.g4vrk</groupId>
+        <artifactId>FunctionalLib</artifactId>
+        <version>ПОСЛЕДНЯЯ_ВЕРСИЯ</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
 ```
 
-в plugin.yml:
+plugin.yml:
 ```yaml
 depend: [FunctionalLib]
 ```
 
-# Использование
+### Основные возможности
+
+- 🎨 Гибкое форматирование текста `(TextFormatter)` — MiniMessage / Legacy / Mixed
+- 📋 Красивые цветные логи с поддержкой Adventure Component (PluginLogger)
+- 🛍 Мощный билдер предметов + загрузка из конфига (ItemBuilder)
+- 🗄 Простое подключение к MySQL / SQLite с пулом соединений
+- ⚙ Удобное управление несколькими yaml-конфигами (YamlConfigManager)
+- 🎬 Система действий из конфига (ActionExecutor) — message, title, sound, console, actionbar и др.
+- 🖥 Умные команды с субкомандами, требованиями, асинхронностью (SmartCommand)
+
+### Примеры
 
 Форматировка текста:
 ```java
