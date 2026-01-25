@@ -4,15 +4,9 @@ import com.g4vrk.functionalLib.util.formatter.TextFormatType;
 import com.g4vrk.functionalLib.util.formatter.TextFormatter;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @UtilityClass @Deprecated
 public class TextUtil {
