@@ -6,7 +6,7 @@
 
     <groupId>com.g4vrk</groupId>
     <artifactId>FunctionalLib</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <name>FunctionalLib</name>
@@ -57,10 +57,6 @@
                         </filter>
                     </filters>
                     <relocations>
-                        <relocation>
-                            <pattern>net.kyori</pattern>
-                            <shadedPattern>com.g4vrk.libs.kyori</shadedPattern>
-                        </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>com.g4vrk.libs.bstats</shadedPattern>
