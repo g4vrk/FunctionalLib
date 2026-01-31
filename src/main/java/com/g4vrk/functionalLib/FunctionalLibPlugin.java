@@ -2,6 +2,7 @@ package com.g4vrk.functionalLib;
 
 import com.g4vrk.functionalLib.menu.listener.MenuClickListener;
 import com.g4vrk.functionalLib.util.MinecraftVersion;
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.jetbrains.annotations.NotNull;
@@ -17,14 +18,17 @@ public final class FunctionalLibPlugin extends BasePlugin {
 
     public static final String NAME = "FunctionalLib";
 
+    @Getter(AccessLevel.NONE)
     private BukkitAudiences audiences;
 
     @Override
     public void onEnabling() {
         instance = this;
+        if (!MinecraftVersion.isPaper())
+            throw new IllegalStateException("Для работы плагина используйте Paper и его форки!");
         BasePlugin.setLib(this);
         log = getSLF4JLogger();
-        audiences = BukkitAudiences.create(this);
+
         new MenuClickListener().registerEvents(this);
 
         MinecraftVersion minecraftVersion = MinecraftVersion.current();
@@ -35,6 +39,8 @@ public final class FunctionalLibPlugin extends BasePlugin {
                     minecraftVersion.getPatch());
             log.error("Пожалуйста, используйте 1.18.2 и выше для стабильной работы!");
         }
+
+        if (this.audiences == null) this.audiences = BukkitAudiences.create(this);
     }
 
     @Override
@@ -49,5 +55,10 @@ public final class FunctionalLibPlugin extends BasePlugin {
             return log = LoggerFactory.getLogger(NAME);
         }
         return log;
+    }
+
+    public BukkitAudiences getAudiences() {
+        if (audiences == null) return audiences = BukkitAudiences.create(this);
+        return audiences;
     }
 }
