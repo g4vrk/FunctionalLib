@@ -28,6 +28,11 @@ public final class CommandUtil {
         return (CommandMap) Reflect.getFieldValue(server, "commandMap");
     }
 
+    @SuppressWarnings("unchecked")
+    private static Map<String, Command> getKnownCommands() {
+        return (Map<String, Command>) Reflect.getFieldValue(COMMAND_MAP, "knownCommands");
+    }
+
     public static PluginCommand create(String name, Plugin plugin) {
         return Reflect.newInstance(PluginCommand.class, name, plugin);
     }
@@ -52,11 +57,6 @@ public final class CommandUtil {
                 it.remove();
             }
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Map<String, Command> getKnownCommands() {
-        return (Map<String, Command>) Reflect.getFieldValue(COMMAND_MAP, "knownCommands");
     }
 
     private static boolean matches(String key, String name) {
