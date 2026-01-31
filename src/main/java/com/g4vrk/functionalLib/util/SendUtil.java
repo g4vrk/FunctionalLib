@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.time.Duration;
 
-@UtilityClass
+@UtilityClass @Deprecated
 public class SendUtil {
 
     private final BukkitAudiences AUDIENCES = FunctionalLibPlugin.getInstance().getAudiences();
