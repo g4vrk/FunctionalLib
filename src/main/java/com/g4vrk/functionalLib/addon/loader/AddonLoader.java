@@ -1,6 +1,6 @@
 package com.g4vrk.functionalLib.addon.loader;
 
-import com.g4vrk.functionalLib.addon.AbstractAddon;
+import com.g4vrk.functionalLib.addon.Addon;
 import com.g4vrk.functionalLib.addon.AddonClassLoader;
 import com.g4vrk.functionalLib.addon.AddonDescription;
 import com.g4vrk.functionalLib.logging.PluginLogger;
@@ -101,7 +101,7 @@ public class AddonLoader {
 
     record AddonContainer(
             String name,
-            AbstractAddon addon,
+            Addon addon,
             AddonDescription description,
             URLClassLoader classLoader
     ) {}

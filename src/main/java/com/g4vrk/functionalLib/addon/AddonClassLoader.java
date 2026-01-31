@@ -10,7 +10,7 @@ import java.net.URLClassLoader;
 @Getter
 public class AddonClassLoader extends URLClassLoader {
 
-    private final AbstractAddon addon;
+    private final Addon addon;
     private final AddonDescription description;
 
     public AddonClassLoader(File jarFile, AddonDescription description) throws Exception {
@@ -18,12 +18,12 @@ public class AddonClassLoader extends URLClassLoader {
         this.description = description;
 
         Class<?> clazz = Class.forName(description.getMainClass(), true, this);
-        if (!AbstractAddon.class.isAssignableFrom(clazz)) {
+        if (!Addon.class.isAssignableFrom(clazz)) {
             close();
             throw new IllegalStateException("Главный класс аддона не наследует AbstractAddon");
         }
 
-        this.addon = (AbstractAddon) clazz.getDeclaredConstructor().newInstance();
+        this.addon = (Addon) clazz.getDeclaredConstructor().newInstance();
     }
 
     public void init(JavaPlugin plugin, File dataFolder) {

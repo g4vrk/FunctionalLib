@@ -2,12 +2,10 @@ package com.g4vrk.functionalLib.addon;
 
 import com.g4vrk.functionalLib.configuration.Configuration;
 import com.g4vrk.functionalLib.configuration.yaml.YamlConfig;
-import com.g4vrk.functionalLib.configuration.yaml.YamlConfigFactory;
 import com.g4vrk.functionalLib.logging.PluginLogger;
 import com.g4vrk.functionalLib.logging.PluginLoggerFactory;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -15,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
-public class AbstractAddon {
+public class Addon {
     private boolean enabled = false;
 
     private JavaPlugin parent;
@@ -25,7 +23,7 @@ public class AbstractAddon {
 
     private final Map<String, Configuration> configs = new ConcurrentHashMap<>();
 
-    public AbstractAddon() {}
+    public Addon() {}
 
     final void init(JavaPlugin parent, File dataFolder, AddonDescription description) {
         this.parent = parent;
