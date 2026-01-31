@@ -68,10 +68,8 @@ public class TextFormatter {
     }
 
     private Component formatMixed(String input) {
-        Component legacyComponent = formatLegacy(input);
+        Component formatted = formatLegacy(input);
 
-        String mini = MINI_MESSAGE.serialize(legacyComponent);
-
-        return MINI_MESSAGE.deserialize(mini);
+        return formatMiniMessage(MINI_MESSAGE.serialize(formatted));
     }
 }
