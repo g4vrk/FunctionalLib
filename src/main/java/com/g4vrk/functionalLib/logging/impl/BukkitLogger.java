@@ -30,7 +30,7 @@ public class BukkitLogger implements PluginLogger {
     public void log(LogLevel level, Component message, Throwable throwable) {
         if (level == LogLevel.DEBUG && !debug) return;
 
-        String plain = TextUtil.plain(message);
+        String plain = TextUtil.plain(String.valueOf(message));
 
         switch (level) {
             case INFO -> {
