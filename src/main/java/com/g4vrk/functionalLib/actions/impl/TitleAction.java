@@ -5,9 +5,6 @@ import com.g4vrk.functionalLib.actions.ActionContext;
 import com.g4vrk.functionalLib.util.SendUtil;
 import com.g4vrk.functionalLib.util.text.TextUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
-
-import java.time.Duration;
 
 public class TitleAction implements Action {
 
