@@ -1,6 +1,8 @@
 package com.g4vrk.functionalLib.util.formatter;
 
 import com.g4vrk.functionalLib.util.MinecraftVersion;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.Builder;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -10,8 +12,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.time.Duration;
 
 @Getter
 @Builder
@@ -37,11 +38,15 @@ public class TextFormatter {
     @Builder.Default
     private boolean cache = true;
 
-    private final Map<String, Component> componentCache = new ConcurrentHashMap<>();
+    private final Cache<String, Component> resultCache = Caffeine.newBuilder()
+            .maximumSize(1000)
+            .expireAfterAccess(Duration.ofMinutes(10))
+            .build();
 
     public @NotNull Component format(@NotNull String input) {
         if (!cache) return format0(input);
-        return componentCache.computeIfAbsent(input, this::format0);
+
+        return resultCache.get(input, this::format0);
     }
 
     public @NotNull String legacy(@NotNull String input) {
