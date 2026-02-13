@@ -29,6 +29,9 @@
         </repository>
     </repositories>
 
+    <build>
+        <finalName>${project.parent.artifactId}-${project.version}-api</finalName>
+    </build>
 
     <dependencies>
         <dependency>
