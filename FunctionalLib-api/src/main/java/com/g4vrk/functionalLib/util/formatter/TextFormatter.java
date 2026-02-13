@@ -1,5 +1,6 @@
 package com.g4vrk.functionalLib.util.formatter;
 
+import com.g4vrk.functionalLib.util.MinecraftVersion;
 import lombok.Builder;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -28,6 +29,8 @@ public class TextFormatter {
     private static final PlainTextComponentSerializer PLAIN_SERIALIZER =
             PlainTextComponentSerializer.plainText();
 
+    private static final boolean LEGACY_SERVER_VERSION = MinecraftVersion.current().isBelow(MinecraftVersion.v1_18_2);
+
     @Builder.Default
     private TextFormatType type = TextFormatType.MIXED;
 
@@ -54,6 +57,7 @@ public class TextFormatter {
             case MINI_MESSAGE -> formatMiniMessage(input);
             case LEGACY -> formatLegacy(input);
             case MIXED -> formatMixed(input);
+            case AUTO -> formatAuto(input);
         };
     }
 
@@ -62,14 +66,33 @@ public class TextFormatter {
     }
 
     private Component formatLegacy(String input) {
+        if (input.indexOf(LegacyComponentSerializer.AMPERSAND_CHAR) == -1) {
+            return LEGACY_SERIALIZER.deserialize(input);
+        }
+
         return LEGACY_SERIALIZER.deserialize(
-                input.replace('&', ChatColor.COLOR_CHAR)
+                input.replace(LegacyComponentSerializer.AMPERSAND_CHAR, ChatColor.COLOR_CHAR)
         );
     }
 
     private Component formatMixed(String input) {
-        Component formatted = formatLegacy(input);
+        boolean hasLegacy = input.indexOf(LegacyComponentSerializer.AMPERSAND_CHAR) != -1 || input.indexOf(LegacyComponentSerializer.SECTION_CHAR) != -1;
+        boolean hasMini = input.indexOf('<') != -1 && input.indexOf('>') != -1;
 
-        return formatMiniMessage(MINI_MESSAGE.serialize(formatted));
+        if (!hasLegacy && !hasMini) return Component.text(input);
+
+        if (!hasLegacy) return MINI_MESSAGE.deserialize(input);
+
+        if (!hasMini) return formatLegacy(input);
+
+        var legacyComponent = formatLegacy(input);
+
+        return MINI_MESSAGE.deserialize(
+                MINI_MESSAGE.serialize(legacyComponent)
+        );
+    }
+
+    private Component formatAuto(String input) {
+        return LEGACY_SERVER_VERSION ? formatLegacy(input) : formatMixed(input);
     }
 }
