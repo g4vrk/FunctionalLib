@@ -40,8 +40,8 @@ public abstract class Task implements Runnable {
         return this;
     }
 
-    public Task async(boolean value) {
-        this.async = value;
+    public Task async(boolean async) {
+        this.async = async;
         return this;
     }
 
@@ -61,7 +61,7 @@ public abstract class Task implements Runnable {
     }
 
     @Override
-    public void run() {
+    public final void run() {
         start();
     }
 

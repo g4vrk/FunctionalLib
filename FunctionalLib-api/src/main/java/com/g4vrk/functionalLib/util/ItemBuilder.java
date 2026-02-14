@@ -166,7 +166,7 @@ public record ItemBuilder(ItemStack itemStack) {
     public static ItemBuilder fromConfiguration(ConfigurationSection section) {
         ItemBuilder builder = new ItemBuilder(section.getString("material", DEFAULT_MATERIAL.name()));
 
-        if (section.contains("display_name")) builder.name(section.getString("display-name"));
+        if (section.contains("display_name")) builder.name(section.getString("display_name"));
         if (section.contains("model_data")) builder.customModelData(section.getInt("model_data"));
         if (section.contains("lore")) builder.lore(section.getStringList("lore"));
         if (section.contains("color")) builder.color(ColorUtil.fromHex(section.getString("color")));
