@@ -1,22 +1,28 @@
 package com.g4vrk.functionalLib;
 
+import com.g4vrk.functionalLib.command.registrator.CommandRegistrator;
+import com.g4vrk.functionalLib.command.registrator.impl.LegacyCommandRegistrator;
+import com.g4vrk.functionalLib.command.registrator.impl.PaperCommandRegistrator;
 import com.g4vrk.functionalLib.logging.PluginLogger;
 import com.g4vrk.functionalLib.logging.PluginLoggerFactory;
 import com.g4vrk.functionalLib.menu.listener.MenuClickListener;
 import com.g4vrk.functionalLib.util.MinecraftVersion;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-final class Bootstrap implements FunctionalLibAPI {
+final class Loader implements FunctionalLibAPI {
 
     private final JavaPlugin plugin;
     private final PluginLogger logger;
 
     private BukkitAudiences audiences;
 
-    Bootstrap(FunctionalLibPlugin plugin) {
+    private CommandRegistrator commandRegistrator;
+
+    Loader(FunctionalLibPlugin plugin) {
         this.plugin = plugin;
         this.logger = PluginLoggerFactory.getLogger(plugin);
     }
@@ -26,8 +32,7 @@ final class Bootstrap implements FunctionalLibAPI {
     }
 
     public void onEnable() {
-        if (!MinecraftVersion.isPaper())
-            throw new IllegalStateException("Для работы плагина используйте Paper и его форки!");
+        this.commandRegistrator = MinecraftVersion.isPaper() ? new PaperCommandRegistrator() : new LegacyCommandRegistrator();
 
         new MenuClickListener().registerEvents(plugin);
 
@@ -70,5 +75,10 @@ final class Bootstrap implements FunctionalLibAPI {
     @Override
     public @NotNull PluginDescriptionFile getDescription() {
         return plugin.getDescription();
+    }
+
+    @Override
+    public @NotNull CommandRegistrator getCommandRegistrator() {
+        return commandRegistrator;
     }
 }

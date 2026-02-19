@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
@@ -24,7 +25,6 @@ public abstract class Menu implements InventoryHolder {
     protected Inventory inventory;
     @Setter
     protected Menu parent;
-    protected Player viewer;
 
     public Menu() {
     }
@@ -37,32 +37,34 @@ public abstract class Menu implements InventoryHolder {
         return Bukkit.createInventory(this, getSize() % 9 == 0 ? getSize() : (getSize() / 9) * 9, TextUtil.format(getTitle() != null ? getTitle() : ""));
     }
 
-    protected void setInventoryItems(@Nullable Object... placeholders) {
-        items.forEach((slot, menuItem) -> inventory.setItem(slot, inventory.getItem(slot) == null ? menuItem.getItemStack(placeholders) : inventory.getItem(slot)));
+    protected void setInventoryItems(Player player, @Nullable Object... placeholders) {
+        items.forEach((slot, menuItem) -> menuItem.place(inventory, player, placeholders));
     }
 
-    protected void prepareInventory(Player player) {
+    protected CompletableFuture<Void> prepareInventory(Player player) {
         inventory.clear();
-        items.clear();
 
-        loadItems();
-        setInventoryItems((Object) null);
+        return CompletableFuture.runAsync(() -> {
+            items.clear();
+
+            loadItems();
+            setInventoryItems(player, null);
+        });
     }
 
     public void refresh(Player player) {
-        prepareInventory(player);
+        prepareInventory(player).thenRun(player::updateInventory);
     }
 
     public void show(@NotNull Player player) {
         inventory = createInventory();
-        viewer = player;
-        prepareInventory(player);
 
-        player.openInventory(inventory);
+        prepareInventory(player).thenRun(() -> player.openInventory(inventory));
     }
 
     public void showParent(@NotNull Player player) {
         if (parent == null) return;
+
         parent.show(player);
     }
 

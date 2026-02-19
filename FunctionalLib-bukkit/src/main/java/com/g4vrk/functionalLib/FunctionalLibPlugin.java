@@ -5,35 +5,35 @@ import org.bukkit.plugin.ServicePriority;
 
 public final class FunctionalLibPlugin extends AbstractPlugin {
 
-    private Bootstrap bootstrap;
+    private Loader loader;
 
     public FunctionalLibPlugin() {
     }
 
     @Override
     public void onPluginLoad() {
-        this.bootstrap = new Bootstrap(this);
+        this.loader = new Loader(this);
 
         var services = Bukkit.getServicesManager();
 
         services.register(
                 FunctionalLibAPI.class,
-                bootstrap,
+                loader,
                 this,
                 ServicePriority.Highest
         );
 
-        bootstrap.onLoad();
-        bootstrap.onLoad();
+        loader.onLoad();
+        loader.onLoad();
     }
 
     @Override
     public void onPluginEnable() {
-        bootstrap.onEnable();
+        loader.onEnable();
     }
 
     @Override
     public void onPluginDisable() {
-        bootstrap.onDisable();
+        loader.onDisable();
     }
 }

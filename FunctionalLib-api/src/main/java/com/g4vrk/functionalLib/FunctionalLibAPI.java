@@ -1,5 +1,6 @@
 package com.g4vrk.functionalLib;
 
+import com.g4vrk.functionalLib.command.registrator.CommandRegistrator;
 import com.g4vrk.functionalLib.logging.PluginLogger;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
@@ -17,6 +18,8 @@ public interface FunctionalLibAPI {
 
     @NotNull String getVersion();
     @NotNull PluginDescriptionFile getDescription();
+
+    @NotNull CommandRegistrator getCommandRegistrator();
 
     static Optional<FunctionalLibAPI> getAPI() {
         var api = Bukkit.getServicesManager().getRegistration(FunctionalLibAPI.class);

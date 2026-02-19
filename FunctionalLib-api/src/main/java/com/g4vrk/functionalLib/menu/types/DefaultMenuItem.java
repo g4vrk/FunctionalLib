@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 public class DefaultMenuItem extends MenuItem {
 
     private final Configuration configuration;
-    private final ActionExecutor actionExecutor;
+    private final ActionExecutor<Player> actionExecutor;
 
-    public DefaultMenuItem(Menu menu, String key, Configuration configuration, ActionExecutor actionExecutor) {
+    public DefaultMenuItem(Menu menu, String key, Configuration configuration, ActionExecutor<Player> actionExecutor) {
         super(menu, key);
         this.configuration = configuration;
         this.actionExecutor = actionExecutor;
@@ -38,7 +38,7 @@ public class DefaultMenuItem extends MenuItem {
         };
 
         if (actionPath != null && configuration.contains(actionPath)) {
-            actionExecutor.runActions(actionPath, player, configuration);
+            actionExecutor.runActions(player, configuration.getStringList(actionPath));
         }
     }
 

@@ -1,11 +1,15 @@
 package com.g4vrk.functionalLib.actions;
 
-public interface Action {
-    void execute(ActionContext context, String args);
+import org.bukkit.Keyed;
+import org.jetbrains.annotations.NotNull;
 
-    default boolean runAsync() {
-        return false;
-    }
+import java.util.Collection;
 
-    String getActionKey();
+public interface Action<T> extends Keyed {
+
+    @NotNull Collection<String> getAliases();
+
+    void execute(T context, String args);
+
+    boolean runAsync();
 }

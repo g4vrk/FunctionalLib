@@ -12,8 +12,7 @@ public abstract class StaticMenu extends Menu {
         if (initialized) return;
 
         inventory = createInventory();
-        prepareInventory(player);
-        initialized = true;
+        prepareInventory(player).thenRun(() -> initialized = true);
     }
 
     @Override

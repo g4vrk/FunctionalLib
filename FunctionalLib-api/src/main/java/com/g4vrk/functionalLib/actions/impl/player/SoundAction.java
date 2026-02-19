@@ -1,17 +1,23 @@
-package com.g4vrk.functionalLib.actions.impl;
+package com.g4vrk.functionalLib.actions.impl.player;
 
 import com.g4vrk.functionalLib.FunctionalLibAPI;
-import com.g4vrk.functionalLib.actions.Action;
-import com.g4vrk.functionalLib.actions.ActionContext;
+import com.g4vrk.functionalLib.actions.AbstractAction;
 import com.g4vrk.functionalLib.util.SendUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 
-public class SoundAction implements Action {
+@SuppressWarnings("deprecation")
+public class SoundAction extends AbstractAction<Player> {
+
+    public SoundAction() {
+        super(new NamespacedKey("functionallib", "sound"));
+    }
 
     @Override
-    public void execute(ActionContext context, String args) {
-        if (args == null || args.isBlank() || context.player() == null) return;
+    public void execute(Player player, String args) {
+        if (args == null || args.isBlank() || player == null) return;
 
         String[] parts = args.split(";", 3);
 
@@ -25,8 +31,7 @@ public class SoundAction implements Action {
             org.bukkit.Sound bukkitSound = null;
             try {
                 bukkitSound = org.bukkit.Sound.valueOf(soundStr.toUpperCase());
-            } catch (IllegalArgumentException ignored) {
-            }
+            } catch (IllegalArgumentException ignored) {}
 
             String keyStr;
             if (bukkitSound != null) {
@@ -37,12 +42,10 @@ public class SoundAction implements Action {
 
             sound = Sound.sound(Key.key(keyStr), Sound.Source.MASTER, volume, pitch);
 
-            SendUtil.playSound(context.player(), sound);
+            SendUtil.playSound(player, sound);
 
         } catch (Throwable e) {
-            FunctionalLibAPI.getAPI().ifPresent(functionalLibAPI -> {
-                functionalLibAPI.getLogger().error("Ошибка воспроизведения звука: {}", soundStr, e);
-            });
+            FunctionalLibAPI.getAPI().ifPresent(functionalLibAPI -> functionalLibAPI.getLogger().error("Ошибка воспроизведения звука: {}", soundStr, e));
         }
     }
 
@@ -52,10 +55,5 @@ public class SoundAction implements Action {
         } catch (NumberFormatException e) {
             return (float) 1.0;
         }
-    }
-
-    @Override
-    public String getActionKey() {
-        return "sound";
     }
 }

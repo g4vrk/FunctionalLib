@@ -43,6 +43,13 @@ public class TextFormatter {
             .expireAfterAccess(Duration.ofMinutes(10))
             .build();
 
+    public static TextFormatter textFormatter() {
+        return TextFormatter.builder()
+                .type(TextFormatType.MIXED)
+                .cache(true)
+                .build();
+    }
+
     public @NotNull Component format(@NotNull String input) {
         if (!cache) return format0(input);
 
