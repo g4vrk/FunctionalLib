@@ -17,12 +17,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCommandRegistrator implements CommandRegistrator {
+public class BaseCommandRegistrator implements CommandRegistrator {
 
     private final CommandMap commandMap;
     private final Map<String, Command> knownCommands;
 
-    protected AbstractCommandRegistrator(CommandMap commandMap, Map<String, Command> knownCommands) {
+    protected BaseCommandRegistrator(CommandMap commandMap, Map<String, Command> knownCommands) {
         this.commandMap = commandMap;
         this.knownCommands = knownCommands;
     }
@@ -139,7 +139,7 @@ public abstract class AbstractCommandRegistrator implements CommandRegistrator {
     }
 
     @Override
-    public @NotNull Collection<Command> getPluginCommands(@NotNull Plugin plugin) {
+    public @NotNull Collection<Command> getAllPluginCommands(@NotNull Plugin plugin) {
         String namespace = plugin.getName().toLowerCase(Locale.ROOT) + ":";
 
         return knownCommands.entrySet().stream()

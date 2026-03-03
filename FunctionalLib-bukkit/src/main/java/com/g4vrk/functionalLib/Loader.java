@@ -8,7 +8,6 @@ import com.g4vrk.functionalLib.logging.PluginLoggerFactory;
 import com.g4vrk.functionalLib.menu.listener.MenuClickListener;
 import com.g4vrk.functionalLib.util.MinecraftVersion;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;

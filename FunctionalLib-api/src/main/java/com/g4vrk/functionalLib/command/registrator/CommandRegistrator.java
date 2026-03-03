@@ -29,7 +29,7 @@ public interface CommandRegistrator {
 
     @NotNull Optional<Command> getCommand(@NotNull String name);
     @NotNull Collection<Command> getAllCommands();
-    @NotNull Collection<Command> getPluginCommands(@NotNull Plugin plugin);
+    @NotNull Collection<Command> getAllPluginCommands(@NotNull Plugin plugin);
 
     boolean contains(@NotNull String name);
     boolean contains(@NotNull Command command);

@@ -10,13 +10,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 @UtilityClass
 public class PluginLoggerFactory {
     public PluginLogger getLogger(String name, boolean debug) {
-        String plain = TextUtil.plain(name);
-
         if (MinecraftVersion.hasComponentLogger()) {
-            return new PaperLogger(plain, debug);
+            return new PaperLogger(name, debug);
         }
 
-        return new BukkitLogger(plain, debug);
+        return new BukkitLogger(name, debug);
     }
 
     public PluginLogger getLogger(String name) {

@@ -28,9 +28,9 @@ public interface ActionRegistry<T> {
     boolean contains(@NotNull Action<T> action);
 
     @NotNull Collection<Action<T>> getAll();
-    @NotNull Map<String, Action<T>> getAllMapped();
-
     @NotNull Collection<Action<T>> getAll(Predicate<Action<T>> filter);
+
+    @NotNull Map<String, Action<T>> getAllMapped();
 
     int size();
 }

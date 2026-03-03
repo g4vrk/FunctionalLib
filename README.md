@@ -232,7 +232,7 @@ public class Example {
                 // выполнять ли асинхронно
                 .runAsync(false)
                 // субкомманды
-                .subCommand(new SubCommand() {
+                .argument(new SubCommand() {
                     @Override
                     public String getName() {
                         return "reload";
